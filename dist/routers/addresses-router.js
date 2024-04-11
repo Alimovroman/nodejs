@@ -2,21 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addressesRouter = void 0;
 const express_1 = require("express");
-const addresses = [
-    { id: 1, value: "lenina 1" },
-    { id: 2, value: "karla marksa 5" },
-];
+const addresses_repository_1 = require("../repositories/addresses-repository");
 exports.addressesRouter = (0, express_1.Router)({});
 exports.addressesRouter.get("/", (req, res) => {
-    if (req.query.value) {
-        const value = req.query.value.toString();
-        const address = addresses.filter((a) => a.value.indexOf(value) > -1);
-        address.length === 0 ? res.send(404) : res.send(address);
-    }
-    res.send(addresses);
+    var _a;
+    const address = addresses_repository_1.addressesRepository.getAddresses((_a = req.query.value) === null || _a === void 0 ? void 0 : _a.toString());
+    res.send(address);
 });
 exports.addressesRouter.get("/:id", (req, res) => {
-    const address = addresses.find((a) => a.id === +req.params.id);
+    const address = addresses_repository_1.addressesRepository.getAddressItem(+req.params.id);
     if (address) {
         res.send(address);
     }
@@ -25,25 +19,18 @@ exports.addressesRouter.get("/:id", (req, res) => {
     }
 });
 exports.addressesRouter.delete("/:id", (req, res) => {
-    for (let i = 0; i < addresses.length; i++) {
-        if (addresses[i].id === +req.params.id) {
-            addresses.splice(i, 1);
-            res.send(204);
-            return;
-        }
-    }
-    res.send(404);
+    const isDeleteAddress = addresses_repository_1.addressesRepository.deleteAddress(+req.params.id);
+    isDeleteAddress ? res.send(204) : res.send(404);
 });
 exports.addressesRouter.post("/", (req, res) => {
-    const newAddress = { id: +new Date(), value: req.body.value };
-    addresses.push(newAddress);
+    const addresses = addresses_repository_1.addressesRepository.createAddress(req.body.value);
     res.status(201).send(addresses);
 });
 exports.addressesRouter.put("/:id", (req, res) => {
-    const address = addresses.find((a) => a.id === +req.params.id);
-    if (address) {
-        address.value = req.body.value;
-        res.send(address);
+    const isChange = addresses_repository_1.addressesRepository.changeAddress(+req.params.id, req.body.value);
+    if (isChange) {
+        const addresses = addresses_repository_1.addressesRepository.getAddresses();
+        res.send(addresses);
     }
     else {
         res.send(404);
