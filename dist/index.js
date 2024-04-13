@@ -33,7 +33,7 @@ const middleWare = (0, body_parser_1.default)({});
 app.use(middleWare);
 app.use(counterMiddleware);
 app.use(blablaMiddleware);
-app.use(authMiddleware);
+// app.use(authMiddleware);
 app.use("/products", product_router_1.productsRouter);
 app.use("/addresses", addresses_router_1.addressesRouter);
 app.get("/test", (req, res) => {

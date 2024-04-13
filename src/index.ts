@@ -30,7 +30,7 @@ const middleWare = bodyParser({});
 app.use(middleWare);
 app.use(counterMiddleware);
 app.use(blablaMiddleware);
-app.use(authMiddleware);
+// app.use(authMiddleware);
 
 app.use("/products", productsRouter);
 app.use("/addresses", addressesRouter);
