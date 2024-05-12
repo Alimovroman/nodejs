@@ -1,5 +1,8 @@
 import { Router, Request, Response } from "express";
-import { productsRepository } from "../repositories/products-repository";
+import {
+  Product,
+  productsRepository,
+} from "../repositories/products-repository";
 import { body, validationResult } from "express-validator";
 import { inputValidaionMiddleware } from "../middleware/input-validate-middleware";
 
@@ -15,8 +18,11 @@ productsRouter.get("/:id", (req: Request, res: Response) => {
     res.send(404);
   }
 });
-productsRouter.get("/", (req: Request, res: Response) => {
-  const products = productsRepository.findProducts(req.query.title?.toString());
+productsRouter.get("/", async (req: Request, res: Response) => {
+  const products: Product[] = await productsRepository.findProducts(
+    req.query.title?.toString()
+  );
+
   res.send(products);
 });
 productsRouter.delete("/:id", (req: Request, res: Response) => {
@@ -27,8 +33,10 @@ productsRouter.post(
   "/",
   titleValidation,
   inputValidaionMiddleware,
-  (req: Request, res: Response) => {
-    const products = productsRepository.createProduct(req.body.title);
+  async (req: Request, res: Response) => {
+    const products: Product[] = await productsRepository.createProduct(
+      req.body.title
+    );
     res.status(201).send(products);
   }
 );
@@ -36,13 +44,13 @@ productsRouter.put(
   "/:id",
   titleValidation,
   inputValidaionMiddleware,
-  (req: Request, res: Response) => {
-    const isChange = productsRepository.changeProductName(
+  async (req: Request, res: Response) => {
+    const isChange = await productsRepository.changeProductName(
       +req.params.id,
       req.body.title
     );
     if (isChange) {
-      const products = productsRepository.findProducts();
+      const products: Product[] = await productsRepository.findProducts();
       res.send(products);
     } else {
       res.send(404);

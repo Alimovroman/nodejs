@@ -2,13 +2,17 @@ const products = [
   { id: 1, title: "tomato" },
   { id: 2, title: "orange" },
 ];
+export type Product = {
+  id: number;
+  title: string;
+};
 
 export const productsRepository = {
   getProduct(id: number) {
     const product = products.find((p) => p.id === id);
     return product;
   },
-  findProducts(title?: string | undefined | null) {
+  async findProducts(title?: string | undefined | null): Promise<Product[]> {
     if (title) {
       const filteredProducts = products.filter(
         (p) => p.title.indexOf(title) > -1
@@ -27,12 +31,12 @@ export const productsRepository = {
     }
     return false;
   },
-  createProduct(title: string) {
+  async createProduct(title: string): Promise<Product[]> {
     const newProduct = { id: +new Date(), title };
     products.push(newProduct);
     return products;
   },
-  changeProductName(id: number, title: string) {
+  async changeProductName(id: number, title: string) {
     const product = products.find((p) => p.id === id);
     if (product) {
       product.title = title;
