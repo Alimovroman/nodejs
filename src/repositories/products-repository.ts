@@ -8,7 +8,7 @@ export type Product = {
 };
 
 export const productsRepository = {
-  getProduct(id: number) {
+  async getProduct(id: number): Promise<Product | undefined> {
     const product = products.find((p) => p.id === id);
     return product;
   },
@@ -22,7 +22,7 @@ export const productsRepository = {
       return products;
     }
   },
-  deleteItem(id: number) {
+  async deleteItem(id: number): Promise<boolean> {
     for (let i = 0; i < products.length; i++) {
       if (products[i].id === id) {
         products.splice(i, 1);

@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import { productsRouter } from "./routers/product-router";
 import { addressesRouter } from "./routers/addresses-router";
+import { runDb } from "./repositories/db";
 
 const app = express();
 const port = 3000;
@@ -41,6 +42,11 @@ app.get("/test", (req: Request, res: Response) => {
   res.send({ value: blabla + "!!!" + count });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+const startApp = async () => {
+  await runDb();
+  app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
+  });
+};
+
+startApp();

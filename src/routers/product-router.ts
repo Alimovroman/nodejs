@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import {
   Product,
   productsRepository,
-} from "../repositories/products-repository";
+} from "../repositories/products-db-repository";
 import { body, validationResult } from "express-validator";
 import { inputValidaionMiddleware } from "../middleware/input-validate-middleware";
 
@@ -10,8 +10,8 @@ export const productsRouter = Router({});
 
 const titleValidation = body("title").trim().isLength({ min: 3, max: 30 });
 
-productsRouter.get("/:id", (req: Request, res: Response) => {
-  const product = productsRepository.getProduct(+req.params.id);
+productsRouter.get("/:id", async (req: Request, res: Response) => {
+  const product = await productsRepository.getProduct(+req.params.id);
   if (product) {
     res.send(product);
   } else {
@@ -25,8 +25,8 @@ productsRouter.get("/", async (req: Request, res: Response) => {
 
   res.send(products);
 });
-productsRouter.delete("/:id", (req: Request, res: Response) => {
-  const isDelete = productsRepository.deleteItem(+req.params.id);
+productsRouter.delete("/:id", async (req: Request, res: Response) => {
+  const isDelete = await productsRepository.deleteItem(+req.params.id);
   isDelete ? res.send(204) : res.send(404);
 });
 productsRouter.post(

@@ -16,8 +16,10 @@ const products = [
 ];
 exports.productsRepository = {
     getProduct(id) {
-        const product = products.find((p) => p.id === id);
-        return product;
+        return __awaiter(this, void 0, void 0, function* () {
+            const product = products.find((p) => p.id === id);
+            return product;
+        });
     },
     findProducts(title) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,13 +33,15 @@ exports.productsRepository = {
         });
     },
     deleteItem(id) {
-        for (let i = 0; i < products.length; i++) {
-            if (products[i].id === id) {
-                products.splice(i, 1);
-                return true;
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].id === id) {
+                    products.splice(i, 1);
+                    return true;
+                }
             }
-        }
-        return false;
+            return false;
+        });
     },
     createProduct(title) {
         return __awaiter(this, void 0, void 0, function* () {
